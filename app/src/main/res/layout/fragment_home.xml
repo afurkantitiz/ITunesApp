@@ -8,20 +8,6 @@
     android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Itunes Search"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
@@ -31,19 +17,71 @@
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintTop_toTopOf="parent"
         app:queryBackground="@android:color/transparent"
         app:queryHint="Search" />
 
-    <View
-        android:id="@+id/view"
+    <com.addisonelliott.segmentedbutton.SegmentedButtonGroup
+        android:id="@+id/buttonGroup"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:background="@color/teal_200"
+        android:background="@color/white"
+        app:borderColor="@color/teal_200"
+        app:borderWidth="1dp"
+        app:divider="@color/teal_200"
+        app:dividerPadding="5dp"
+        app:dividerWidth="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
+        app:position="0"
+        app:radius="10dp"
+        app:ripple="true"
+        app:rippleColor="@color/purple_200"
+        app:selectedBackground="@color/purple_700">
+
+        <com.addisonelliott.segmentedbutton.SegmentedButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            app:selectedTextColor="@color/teal_200"
+            app:text="Movies"
+            app:textStyle="bold"
+            app:textColor="@color/black" />
+
+        <com.addisonelliott.segmentedbutton.SegmentedButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            app:selectedTextColor="@color/teal_200"
+            app:text="Music"
+            app:textStyle="bold"
+            app:textColor="@color/black" />
+
+        <com.addisonelliott.segmentedbutton.SegmentedButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            app:selectedTextColor="@color/teal_200"
+            app:text="Ebook"
+            app:textStyle="bold"
+            app:textColor="@color/black" />
+
+        <com.addisonelliott.segmentedbutton.SegmentedButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            app:selectedTextColor="@color/teal_200"
+            app:text="Podcast"
+            app:textStyle="bold"
+            app:textColor="@color/black" />
+    </com.addisonelliott.segmentedbutton.SegmentedButtonGroup>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -64,6 +102,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view"
-        tools:listitem="@layout/item_search_card" />
+        app:layout_constraintTop_toBottomOf="@id/buttonGroup" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -92,4 +92,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"
+
+    //Segment Button
+    implementation 'com.github.addisonelliott:SegmentedButton:3.1.2-support'
 }

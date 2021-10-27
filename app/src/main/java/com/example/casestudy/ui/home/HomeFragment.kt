@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.addisonelliott.segmentedbutton.SegmentedButtonGroup.OnPositionChangedListener
 import com.example.casestudy.base.BaseFragment
 import com.example.casestudy.data.entity.BaseResult
 import com.example.casestudy.databinding.FragmentHomeBinding
@@ -15,20 +16,46 @@ import com.example.casestudy.utils.gone
 import com.example.casestudy.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
     private val homeAdapter: HomeAdapter = HomeAdapter()
     private val viewModel: HomeViewModel by viewModels()
     private var homeList: ArrayList<BaseResult> = arrayListOf()
 
+    private var currentSearchText = ""
     private var limitChanger = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
-        getDataForApi()
         searchViewListener()
+        categoryListeners()
+    }
+
+    private fun categoryListeners() {
+        binding.buttonGroup.onPositionChangedListener =
+            OnPositionChangedListener { currentPosition ->
+                when (currentPosition) {
+                    0 -> {
+                        resetSearch()
+                        getDataFromApi(currentSearchText, "movie")
+                    }
+                    1 -> {
+                        resetSearch()
+                        getDataFromApi(currentSearchText, "music")
+                    }
+                    2 -> {
+                        resetSearch()
+                        getDataFromApi(currentSearchText, "ebook")
+                    }
+                    3 -> {
+                        resetSearch()
+                        getDataFromApi(currentSearchText, "podcast")
+                    }
+                }
+            }
     }
 
     private fun initViews() {
@@ -43,18 +70,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText?.length!! > 2){
-                    getDataForApi(newText)
-                }else if (newText.isEmpty()){
+                if (newText?.length!! > 2) {
+                    currentSearchText = newText
+                    getDataFromApi(currentSearchText, "movie")
+                } else if (newText.isEmpty()) {
                     resetSearch()
+                    currentSearchText = ""
                 }
                 return true
             }
         })
     }
 
-    private fun getDataForApi(term: String = "") {
-        viewModel.getNewsByQuery(term).observe(viewLifecycleOwner, { response ->
+    private fun getDataFromApi(term: String = "", currentMedia: String = "movie") {
+        viewModel.getNewsByQuery(term, currentMedia).observe(viewLifecycleOwner, { response ->
             when (response.status) {
                 Resource.Status.LOADING -> {
                     binding.progressBar.show()

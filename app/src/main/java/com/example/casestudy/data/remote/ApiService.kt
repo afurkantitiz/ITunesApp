@@ -6,8 +6,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ApiService {
-    @GET("search?media=ebook&limit=20")
+    @GET("search?limit=20")
     suspend fun getSearchByQuery(
-        @Query("term") term: String
+        @Query("term") term: String,
+        @Query("media") media: String,
     ): Response<BaseResponse>
 }
