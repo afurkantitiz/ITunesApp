@@ -13,7 +13,7 @@ class HomeViewModel @Inject constructor(
     private var apiRepository: ApiRepository
 ) : ViewModel() {
 
-    fun getNewsByQuery(): LiveData<Resource<BaseResponse>> {
-        return apiRepository.getSearchByQuery()
+    fun getNewsByQuery(term: String): LiveData<Resource<BaseResponse>> {
+        return apiRepository.getSearchByQuery(term)
     }
 }

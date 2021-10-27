@@ -6,7 +6,7 @@ import javax.inject.Inject
 class RemoteDataSource @Inject constructor(
     private val apiService: ApiService
 ) : BaseDataSource() {
-    suspend fun getSearchByQuery() = getResult {
-        apiService.getSearchByQuery()
+    suspend fun getSearchByQuery(term: String) = getResult {
+        apiService.getSearchByQuery(term)
     }
 }

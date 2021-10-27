@@ -20,11 +20,11 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
     override fun onBindViewHolder(holder: HomeAdapter.HomeViewHolder, position: Int) {
         val search: BaseResult = searchList[position]
 
-        holder.binding.searchNameTextView.text = search.artistName
+        holder.binding.nameTextView.text = search.artistName
         Glide
-            .with(holder.binding.searchImageView.context)
+            .with(holder.binding.imageView.context)
             .load(search.artworkUrl100)
-            .into(holder.binding.searchImageView)
+            .into(holder.binding.imageView)
     }
 
     @SuppressLint("NotifyDataSetChanged")
