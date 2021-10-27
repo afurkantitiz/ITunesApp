@@ -2,7 +2,7 @@ package com.example.casestudy.data.entity
 
 import com.google.gson.annotations.SerializedName
 
-data class Result(
+data class BaseResult(
     @SerializedName("artistId")
     val artistId: Int?,
     @SerializedName("artistName")
