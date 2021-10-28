@@ -27,11 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:background="@color/white"
-        app:borderColor="@color/teal_200"
-        app:borderWidth="1dp"
-        app:divider="@color/teal_200"
-        app:dividerPadding="5dp"
+        android:background="@color/lightGray"
+        app:divider="@color/gray"
         app:dividerWidth="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,31 +40,34 @@
         app:selectedBackground="@color/purple_700">
 
         <com.addisonelliott.segmentedbutton.SegmentedButton
+            android:id="@+id/movieButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="10dp"
-            app:selectedTextColor="@color/teal_200"
+            app:selectedTextColor="@color/white"
             app:text="Movies"
             app:textStyle="bold"
             app:textColor="@color/black" />
 
         <com.addisonelliott.segmentedbutton.SegmentedButton
+            android:id="@+id/musicButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="10dp"
-            app:selectedTextColor="@color/teal_200"
+            app:selectedTextColor="@color/white"
             app:text="Music"
             app:textStyle="bold"
             app:textColor="@color/black" />
 
         <com.addisonelliott.segmentedbutton.SegmentedButton
+            android:id="@+id/ebookButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="10dp"
-            app:selectedTextColor="@color/teal_200"
+            app:selectedTextColor="@color/white"
             app:text="Ebook"
             app:textStyle="bold"
             app:textColor="@color/black" />
@@ -77,7 +77,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="10dp"
-            app:selectedTextColor="@color/teal_200"
+            app:selectedTextColor="@color/white"
             app:text="Podcast"
             app:textStyle="bold"
             app:textColor="@color/black" />
@@ -97,8 +97,21 @@
         android:id="@+id/searchRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonGroup" />
+
+    <ImageView
+        android:id="@+id/notFoundImageView"
+        android:layout_width="match_parent"
+        android:src="@drawable/ic_not_found"
+        android:visibility="gone"
+        android:layout_height="0dp"
+        android:contentDescription="@string/not_found"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

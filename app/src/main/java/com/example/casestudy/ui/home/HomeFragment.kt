@@ -2,7 +2,6 @@ package com.example.casestudy.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
@@ -70,10 +69,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText?.length!! > 2) {
-                    currentSearchText = newText
-                    getDataFromApi(currentSearchText, "movie")
-                } else if (newText.isEmpty()) {
+                currentSearchText = newText!!
+                getDataFromApi(currentSearchText, "movie")
+
+                if (currentSearchText.isEmpty()) {
                     resetSearch()
                     currentSearchText = ""
                 }
@@ -82,27 +81,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         })
     }
 
-    private fun getDataFromApi(term: String = "", currentMedia: String = "movie") {
-        viewModel.getNewsByQuery(term, currentMedia).observe(viewLifecycleOwner, { response ->
-            when (response.status) {
-                Resource.Status.LOADING -> {
-                    binding.progressBar.show()
-                    binding.searchRecyclerView.gone()
-                }
-                Resource.Status.SUCCESS -> {
-                    binding.progressBar.gone()
-                    binding.searchRecyclerView.show()
+    private fun getDataFromApi(term: String, currentMedia: String) {
+        if (term.length > 2) {
+            viewModel.getNewsByQuery(term, currentMedia).observe(viewLifecycleOwner, { response ->
+                when (response.status) {
+                    Resource.Status.LOADING -> {
+                        binding.progressBar.show()
+                        binding.searchRecyclerView.gone()
+                    }
+                    Resource.Status.SUCCESS -> {
+                        binding.progressBar.gone()
+                        binding.searchRecyclerView.show()
 
-                    if (response.data?.results?.size != 0) {
-                        homeList = (response.data?.results as ArrayList<BaseResult>?)!!
-                        homeAdapter.setData(homeList)
+                        if (response.data?.results?.size != 0) {
+                            homeList = (response.data?.results as ArrayList<BaseResult>?)!!
+                            homeAdapter.setData(homeList)
+                        } else
+                            homeAdapter.setData(emptyList())
+                    }
+                    Resource.Status.ERROR -> {
+                        binding.searchRecyclerView.gone()
+                        binding.notFoundImageView.show()
                     }
                 }
-                Resource.Status.ERROR -> {
-                    Log.v("Search", "Error")
-                }
-            }
-        })
+            })
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
