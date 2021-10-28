@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.casestudy.R
@@ -13,6 +12,7 @@ import com.example.casestudy.databinding.ItemSearchCardBinding
 
 class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
     private var searchList: List<BaseResult> = emptyList()
+    private var listener: IClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeAdapter.HomeViewHolder {
         val binding =
@@ -45,8 +45,9 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
         )
 
         holder.binding.searchCardView.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(search)
-            it.findNavController().navigate(action)
+            listener?.let {
+                listener?.onClick(search)
+            }
         }
     }
 
@@ -54,6 +55,10 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
     fun setData(data: List<BaseResult>) {
         this.searchList = data
         notifyDataSetChanged()
+    }
+
+    fun addListener(listener: IClickListener) {
+        this.listener = listener
     }
 
     override fun getItemCount(): Int = searchList.size

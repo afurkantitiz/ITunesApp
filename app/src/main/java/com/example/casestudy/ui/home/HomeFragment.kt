@@ -2,14 +2,12 @@ package com.example.casestudy.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.transition.Transition
-import android.transition.TransitionInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.addisonelliott.segmentedbutton.SegmentedButtonGroup.OnPositionChangedListener
-import com.example.casestudy.R
 import com.example.casestudy.base.BaseFragment
 import com.example.casestudy.data.entity.BaseResult
 import com.example.casestudy.databinding.FragmentHomeBinding
@@ -20,7 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate),
+    IClickListener {
     private val homeAdapter: HomeAdapter = HomeAdapter()
     private val viewModel: HomeViewModel by viewModels()
     private var homeList: ArrayList<BaseResult> = arrayListOf()
@@ -61,6 +60,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     private fun initViews() {
+        homeAdapter.addListener(this)
+
         binding.searchRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.searchRecyclerView.adapter = homeAdapter
     }
@@ -75,7 +76,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 currentSearchText = newText!!
                 getDataFromApi(currentSearchText, "movie")
 
-                if (currentSearchText.isEmpty()) {
+                if (currentSearchText.length <= 2) {
                     resetSearch()
                     currentSearchText = ""
                 }
@@ -116,5 +117,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         limitChanger = 1
         homeList.clear()
         homeAdapter.notifyDataSetChanged()
+    }
+
+    override fun onClick(data: BaseResult?) {
+        val action = data?.let { HomeFragmentDirections.actionHomeFragmentToDetailFragment(it) }
+        if (action != null)
+            findNavController().navigate(action)
     }
 }
