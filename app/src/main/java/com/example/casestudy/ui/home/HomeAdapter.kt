@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.casestudy.R
@@ -28,7 +29,7 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
         holder.binding.priceTextView.text = when {
             search.collectionPrice?.isNotEmpty() == true -> search.collectionPrice.toString() + " $"
             search.price?.isNotEmpty() == true -> search.price.toString() + " $"
-            else -> "Not Found"
+            else -> "Price Not Found"
         }
 
         holder.binding.releaseDateTextView.text = search.releaseDate?.substring(0, 10)
@@ -38,8 +39,15 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
             .load(search.artworkUrl100)
             .into(holder.binding.imageView)
 
-        holder.binding.searchCardView.animation = AnimationUtils.loadAnimation(holder.binding.searchCardView.context,
-            R.anim.fade_transition_animation)
+        holder.binding.searchCardView.animation = AnimationUtils.loadAnimation(
+            holder.binding.searchCardView.context,
+            R.anim.fade_transition_animation
+        )
+
+        holder.binding.searchCardView.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(search)
+            it.findNavController().navigate(action)
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

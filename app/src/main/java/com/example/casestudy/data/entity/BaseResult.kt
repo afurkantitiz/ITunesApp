@@ -1,7 +1,10 @@
 package com.example.casestudy.data.entity
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class BaseResult(
     @SerializedName("artistName")
     val artistName: String?,
@@ -21,4 +24,4 @@ data class BaseResult(
     val price: String?,
     @SerializedName("collectionName")
     val collectionName: String?,
-)
+) : Parcelable

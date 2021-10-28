@@ -2,11 +2,14 @@ package com.example.casestudy.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.transition.Transition
+import android.transition.TransitionInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.addisonelliott.segmentedbutton.SegmentedButtonGroup.OnPositionChangedListener
+import com.example.casestudy.R
 import com.example.casestudy.base.BaseFragment
 import com.example.casestudy.data.entity.BaseResult
 import com.example.casestudy.databinding.FragmentHomeBinding
