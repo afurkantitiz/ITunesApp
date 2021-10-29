@@ -7,6 +7,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.addisonelliott.segmentedbutton.SegmentedButtonGroup.OnPositionChangedListener
 import com.example.casestudy.base.BaseFragment
 import com.example.casestudy.data.entity.BaseResult
@@ -16,7 +17,6 @@ import com.example.casestudy.utils.gone
 import com.example.casestudy.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate),
     IClickListener {
@@ -24,15 +24,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val viewModel: HomeViewModel by viewModels()
     private var homeList: ArrayList<BaseResult> = arrayListOf()
 
-    private var currentSearchText = ""
-    private var limitChanger = 1
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
         searchViewListener()
         categoryListeners()
+        onScrollListener()
+    }
+
+    private fun onScrollListener() {
+        binding.searchRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!binding.searchRecyclerView.canScrollVertically(1) &&
+                    newState == RecyclerView.SCROLL_STATE_IDLE
+                ) {
+                    viewModel.limit += 20
+                    getDataFromApi(viewModel.currentSearchText)
+                }
+            }
+        })
     }
 
     private fun categoryListeners() {
@@ -41,19 +53,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 when (currentPosition) {
                     0 -> {
                         resetSearch()
-                        getDataFromApi(currentSearchText, "movie")
+                        viewModel.currentMedia = "movie"
+                        getDataFromApi(viewModel.currentSearchText)
                     }
                     1 -> {
                         resetSearch()
-                        getDataFromApi(currentSearchText, "music")
+                        viewModel.currentMedia = "music"
+                        getDataFromApi(viewModel.currentSearchText)
                     }
                     2 -> {
                         resetSearch()
-                        getDataFromApi(currentSearchText, "ebook")
+                        viewModel.currentMedia = "ebook"
+                        getDataFromApi(viewModel.currentSearchText)
                     }
                     3 -> {
                         resetSearch()
-                        getDataFromApi(currentSearchText, "podcast")
+                        viewModel.currentMedia = "podcast"
+                        getDataFromApi(viewModel.currentSearchText)
                     }
                 }
             }
@@ -73,49 +89,53 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                currentSearchText = newText!!
-                getDataFromApi(currentSearchText, "movie")
+                viewModel.currentSearchText = newText!!
+                resetSearch()
+                getDataFromApi(viewModel.currentSearchText)
 
-                if (currentSearchText.length <= 2) {
+                if (viewModel.currentSearchText.length <= 2) {
                     resetSearch()
-                    currentSearchText = ""
+                    viewModel.currentSearchText = ""
                 }
                 return true
             }
         })
     }
 
-    private fun getDataFromApi(term: String, currentMedia: String) {
+    private fun getDataFromApi(term: String) {
         if (term.length > 2) {
-            viewModel.getNewsByQuery(term, currentMedia).observe(viewLifecycleOwner, { response ->
-                when (response.status) {
-                    Resource.Status.LOADING -> {
-                        binding.progressBar.show()
-                        binding.searchRecyclerView.gone()
-                    }
-                    Resource.Status.SUCCESS -> {
-                        binding.progressBar.gone()
-                        binding.searchRecyclerView.show()
+            viewModel.getNewsByQuery(term, viewModel.currentMedia, viewModel.limit)
+                .observe(viewLifecycleOwner, { response ->
+                    when (response.status) {
+                        Resource.Status.LOADING -> {
+                            binding.progressBar.show()
+                        }
+                        Resource.Status.SUCCESS -> {
+                            binding.progressBar.gone()
 
-                        if (response.data?.results?.size != 0) {
-                            homeList = (response.data?.results as ArrayList<BaseResult>?)!!
-                            homeAdapter.setData(homeList)
-                        } else
-                            homeAdapter.setData(emptyList())
+                            if (response.data?.resultCount!! > viewModel.listSize) {
+                                homeList.clear()
+
+                                viewModel.listSize = response.data.resultCount
+                                homeList.addAll(response.data.results!!)
+
+                                homeAdapter.setData(homeList)
+                                binding.searchRecyclerView.adapter?.notifyItemInserted(homeList.size - 1)
+                            }
+                        }
+                        Resource.Status.ERROR -> {
+                            binding.searchRecyclerView.gone()
+                        }
                     }
-                    Resource.Status.ERROR -> {
-                        binding.searchRecyclerView.gone()
-                        binding.notFoundImageView.show()
-                    }
-                }
-            })
+                })
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun resetSearch() {
-        limitChanger = 1
         homeList.clear()
+        viewModel.listSize = 0
+        viewModel.limit = 20
         homeAdapter.notifyDataSetChanged()
     }
 

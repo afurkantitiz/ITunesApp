@@ -12,8 +12,13 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private var apiRepository: ApiRepository
 ) : ViewModel() {
+    var limit = 20
+    var listSize = 0
 
-    fun getNewsByQuery(term: String, media: String): LiveData<Resource<BaseResponse>> {
-        return apiRepository.getSearchByQuery(term, media)
+    var currentSearchText = ""
+    var currentMedia = "movie"
+
+    fun getNewsByQuery(term: String, media: String, limit: Int): LiveData<Resource<BaseResponse>> {
+        return apiRepository.getSearchByQuery(term, media, limit)
     }
 }

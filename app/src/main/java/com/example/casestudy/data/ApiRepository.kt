@@ -7,7 +7,7 @@ import javax.inject.Inject
 class ApiRepository @Inject constructor(
     private var remoteDataSource: RemoteDataSource,
 ) {
-    fun getSearchByQuery(term: String, media: String) = performNetworkOperation {
-        remoteDataSource.getSearchByQuery(term, media)
+    fun getSearchByQuery(term: String, media: String, limit: Int) = performNetworkOperation {
+        remoteDataSource.getSearchByQuery(term, media, limit)
     }
 }

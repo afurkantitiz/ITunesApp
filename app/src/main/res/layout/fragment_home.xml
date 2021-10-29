@@ -103,17 +103,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/buttonGroup" />
-
-    <ImageView
-        android:id="@+id/notFoundImageView"
-        android:layout_width="match_parent"
-        android:src="@drawable/ic_not_found"
-        android:visibility="gone"
-        android:layout_height="0dp"
-        android:contentDescription="@string/not_found"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonGroup" />
 </androidx.constraintlayout.widget.ConstraintLayout>

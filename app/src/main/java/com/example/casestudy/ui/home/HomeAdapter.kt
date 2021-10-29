@@ -54,7 +54,6 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
     @SuppressLint("NotifyDataSetChanged")
     fun setData(data: List<BaseResult>) {
         this.searchList = data
-        notifyDataSetChanged()
     }
 
     fun addListener(listener: IClickListener) {
