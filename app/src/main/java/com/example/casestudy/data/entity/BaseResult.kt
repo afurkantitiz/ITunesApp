@@ -1,27 +1,42 @@
 package com.example.casestudy.data.entity
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
+@Entity(tableName = "search")
 @Parcelize
 data class BaseResult(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id") val id: Int = 0,
+
     @SerializedName("artistName")
-    val artistName: String?,
+    @ColumnInfo(name = "artistName") val artistName: String?,
+
     @SerializedName("artworkUrl100")
-    val artworkUrl100: String?,
+    @ColumnInfo(name = "artworkUrl100") val artworkUrl100: String?,
+
     @SerializedName("currency")
-    val currency: String?,
+    @ColumnInfo(name = "currency") val currency: String?,
+
     @SerializedName("trackName")
-    val trackName: String?,
+    @ColumnInfo(name = "trackName") val trackName: String?,
+
     @SerializedName("kind")
-    val kind: String?,
+    @ColumnInfo(name = "kind") val kind: String?,
+
     @SerializedName("releaseDate")
-    val releaseDate: String?,
+    @ColumnInfo(name = "releaseDate") val releaseDate: String?,
+
     @SerializedName("collectionPrice")
-    val collectionPrice: String?,
+    @ColumnInfo(name = "collectionPrice") val collectionPrice: String?,
+
     @SerializedName("price")
-    val price: String?,
+    @ColumnInfo(name = "price") val price: String?,
+
     @SerializedName("collectionName")
-    val collectionName: String?,
+    @ColumnInfo(name = "collectionName") val collectionName: String?,
 ) : Parcelable
