@@ -20,4 +20,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                 .into(binding.detailImageView)
         }
     }
+
+    override fun isNavigationVisible(): Boolean = false
 }
