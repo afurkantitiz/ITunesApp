@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.casestudy.data.ApiRepository
 import com.example.casestudy.data.entity.BaseResponse
+import com.example.casestudy.data.entity.BaseResult
 import com.example.casestudy.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -20,5 +21,10 @@ class HomeViewModel @Inject constructor(
 
     fun getNewsByQuery(term: String, media: String, limit: Int): LiveData<Resource<BaseResponse>> {
         return apiRepository.getSearchByQuery(term, media, limit)
+    }
+
+
+    fun getFavorites(): List<BaseResult> {
+        return apiRepository.getFavorites()
     }
 }

@@ -2,6 +2,7 @@ package com.example.casestudy.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
@@ -31,6 +32,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         searchViewListener()
         categoryListeners()
         onScrollListener()
+
+        Log.v("favoriteListSize", viewModel.getFavorites().size.toString())
     }
 
     private fun onScrollListener() {
