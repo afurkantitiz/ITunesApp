@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.casestudy.R
@@ -49,6 +50,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                     )
 
                     binding.lottieAnimation.show()
+                    binding.detailLayout.gone()
 
                     binding.lottieAnimation.addAnimatorListener(object : Animator.AnimatorListener {
                         override fun onAnimationStart(animation: Animator?) {
@@ -57,6 +59,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
 
                         override fun onAnimationEnd(animation: Animator?) {
                             binding.lottieAnimation.gone()
+                            binding.detailLayout.show()
                         }
 
                         override fun onAnimationCancel(animation: Animator?) {
@@ -72,6 +75,10 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                     toast("This item is already in favourites")
             }
         }
+
+        binding.backButton.setOnClickListener {
+            it.findNavController().popBackStack()
+        }
     }
 
     private fun initViews() {
@@ -80,6 +87,20 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                 .with(requireContext())
                 .load(args.currentItem.artworkUrl100)
                 .into(binding.detailImageView)
+
+            binding.detailCurrency.text = args.currentItem.currency
+            binding.detailArtistName.text = args.currentItem.artistName
+            binding.detailKind.text = args.currentItem.kind
+            binding.releaseDate.text = args.currentItem.releaseDate?.substring(0, 10)
+
+            binding.detailCollectionName.text =
+                if (args.currentItem.collectionName?.isNotEmpty() == true) args.currentItem.collectionName else args.currentItem.trackName
+
+            binding.detailPrice.text = when {
+                args.currentItem.collectionPrice?.isNotEmpty() == true -> args.currentItem.collectionPrice.toString() + " $"
+                args.currentItem.price?.isNotEmpty() == true -> args.currentItem.price.toString() + " $"
+                else -> "Price Not Found"
+            }
         }
 
         if (isInFavourite()) binding.likeButton.setImageResource(R.drawable.ic_like)

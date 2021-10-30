@@ -3,9 +3,11 @@ package com.example.casestudy.ui.favorite
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.casestudy.R
 import com.example.casestudy.data.entity.BaseResult
 import com.example.casestudy.databinding.ItemFavoriteCardBinding
 
@@ -43,6 +45,11 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>
                     FavoriteFragmentDirections.actionFavoriteFragmentToDetailFragment(search)
                 it.findNavController().navigate(action)
             }
+
+            favoriteCardView.animation = AnimationUtils.loadAnimation(
+                favoriteCardView.context,
+                R.anim.fade_transition_vertical
+            )
         }
     }
 
