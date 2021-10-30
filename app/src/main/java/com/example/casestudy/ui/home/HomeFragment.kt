@@ -32,8 +32,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         searchViewListener()
         categoryListeners()
         onScrollListener()
-
-        Log.v("favoriteListSize", viewModel.getFavorites().size.toString())
     }
 
     private fun onScrollListener() {
@@ -43,8 +41,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 if (!binding.searchRecyclerView.canScrollVertically(1) &&
                     newState == RecyclerView.SCROLL_STATE_IDLE
                 ) {
-                    viewModel.limit += 20
-                    getDataFromApi(viewModel.currentSearchText)
+                    if (viewModel.limit == viewModel.listSize){
+                        viewModel.limit += 20
+                        getDataFromApi(viewModel.currentSearchText)
+                    }
                 }
             }
         })

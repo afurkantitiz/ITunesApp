@@ -10,6 +10,8 @@ import com.example.casestudy.base.BaseFragment
 import com.example.casestudy.data.entity.BaseResult
 import com.example.casestudy.databinding.FragmentFavoriteBinding
 import com.example.casestudy.utils.SwipeToCard
+import com.example.casestudy.utils.gone
+import com.example.casestudy.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,17 +25,29 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(FragmentFavoriteB
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
+        isFavoriteEmpty()
+    }
+
+    private fun isFavoriteEmpty() {
+        if (favoriteList.isEmpty()) {
+            binding.favoriteRecyclerView.gone()
+            binding.favoriteNotFound.show()
+        } else {
+            binding.favoriteRecyclerView.show()
+            binding.favoriteNotFound.gone()
+        }
     }
 
     private fun initViews() {
-        favoriteList = viewModel.getFavorites() as ArrayList<BaseResult>
         favoriteAdapter.addListener(this)
 
         binding.apply {
             favoriteRecyclerView.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
+            favoriteList = viewModel.getFavorites() as ArrayList<BaseResult>
             favoriteAdapter.setFavorite(favoriteList)
+
             favoriteRecyclerView.adapter = favoriteAdapter
         }
 
@@ -48,5 +62,13 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(FragmentFavoriteB
         favoriteAdapter.setFavorite(favoriteList)
         favoriteAdapter.notifyItemRemoved(position)
         favoriteAdapter.notifyDataSetChanged()
+
+        if (favoriteList.isEmpty()) {
+            binding.favoriteRecyclerView.gone()
+            binding.favoriteNotFound.show()
+        } else {
+            binding.favoriteRecyclerView.show()
+            binding.favoriteNotFound.gone()
+        }
     }
 }

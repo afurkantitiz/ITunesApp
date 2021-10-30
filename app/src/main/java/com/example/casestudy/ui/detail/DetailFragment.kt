@@ -1,14 +1,19 @@
 package com.example.casestudy.ui.detail
 
+import android.animation.Animator
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.casestudy.R
 import com.example.casestudy.base.BaseFragment
 import com.example.casestudy.data.entity.BaseResult
 import com.example.casestudy.databinding.FragmentDetailBinding
+import com.example.casestudy.utils.gone
+import com.example.casestudy.utils.show
 import com.example.casestudy.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,7 +48,26 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                             price = args.currentItem.price
                         )
                     )
-                    toast("Successfully added to favourites")
+
+                    binding.lottieAnimation.show()
+
+                    binding.lottieAnimation.addAnimatorListener(object : Animator.AnimatorListener {
+                        override fun onAnimationStart(animation: Animator?) {
+                            Log.v("Animation", "Started")
+                        }
+
+                        override fun onAnimationEnd(animation: Animator?) {
+                            binding.lottieAnimation.gone()
+                        }
+
+                        override fun onAnimationCancel(animation: Animator?) {
+                            Log.v("Animation", "Canceled")
+                        }
+
+                        override fun onAnimationRepeat(animation: Animator?) {
+                            Log.v("Animation", "Repeated")
+                        }
+                    })
                     binding.likeButton.setImageResource(R.drawable.ic_like)
                 } else
                     toast("This item is already in favourites")

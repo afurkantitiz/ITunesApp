@@ -7,4 +7,5 @@
     <string name="like_dislike">Like/Dislike</string>
     <string name="favorite_image">Favorite Image</string>
     <string name="favorites">Favorites</string>
+    <string name="favorite_not_found">Favorite Not Found</string>
 </resources>

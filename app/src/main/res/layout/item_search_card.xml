@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     app:contentPaddingLeft="8dp"
     app:contentPaddingRight="8dp"
-    android:backgroundTint="@color/purple_700"
+    android:backgroundTint="@color/primary"
     app:contentPaddingBottom="8dp"
     app:contentPaddingTop="8dp"
     android:layout_margin="8dp"
