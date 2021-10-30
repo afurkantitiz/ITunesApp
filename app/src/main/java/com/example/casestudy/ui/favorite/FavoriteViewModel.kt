@@ -13,4 +13,8 @@ class FavoriteViewModel @Inject constructor(
     fun getFavorites(): List<BaseResult> {
         return apiRepository.getFavorites()
     }
+
+    fun unFavoriteNews(search: BaseResult) {
+        return apiRepository.unFavorite(search)
+    }
 }

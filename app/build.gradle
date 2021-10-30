@@ -95,4 +95,7 @@ dependencies {
 
     //Segment Button
     implementation 'com.github.addisonelliott:SegmentedButton:3.1.2-support'
+
+    //Swipe Decorator
+    implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.3'
 }
