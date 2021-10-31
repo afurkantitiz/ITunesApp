@@ -29,12 +29,14 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(FragmentFavoriteB
     }
 
     private fun isFavoriteEmpty() {
-        if (favoriteList.isEmpty()) {
-            binding.favoriteRecyclerView.gone()
-            binding.favoriteNotFound.show()
-        } else {
-            binding.favoriteRecyclerView.show()
-            binding.favoriteNotFound.gone()
+        binding.apply {
+            if (favoriteList.isEmpty()) {
+                favoriteRecyclerView.gone()
+                favoriteNotFound.show()
+            } else {
+                favoriteRecyclerView.show()
+                favoriteNotFound.gone()
+            }
         }
     }
 
@@ -63,12 +65,14 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>(FragmentFavoriteB
         favoriteAdapter.notifyItemRemoved(position)
         favoriteAdapter.notifyDataSetChanged()
 
-        if (favoriteList.isEmpty()) {
-            binding.favoriteRecyclerView.gone()
-            binding.favoriteNotFound.show()
-        } else {
-            binding.favoriteRecyclerView.show()
-            binding.favoriteNotFound.gone()
+        binding.apply {
+            if (favoriteList.isEmpty()) {
+                favoriteRecyclerView.gone()
+                favoriteNotFound.show()
+            } else {
+                favoriteRecyclerView.show()
+                favoriteNotFound.gone()
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ import com.example.casestudy.data.entity.BaseResult
 
 @Dao
 interface SearchDao {
-    @Query("SELECT * FROM search ORDER BY id DESC")
+    @Query("SELECT * FROM search")
     fun getFavoriteNews(): List<BaseResult>
 
     @Insert

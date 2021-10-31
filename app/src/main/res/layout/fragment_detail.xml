@@ -37,8 +37,9 @@
 
         <ImageView
             android:id="@+id/detailImageView"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginTop="16dp"
             android:contentDescription="@string/detail_image"
             android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,64 +48,70 @@
             tools:src="@drawable/ic_launcher_background" />
 
         <TextView
-            android:id="@+id/detailArtistName"
-            android:layout_width="wrap_content"
+            android:id="@+id/detailCollectionName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detailImageView"
+            android:textColor="@color/primary"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Collection name" />
+
+        <TextView
+            android:id="@+id/detailArtistName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailCollectionName"
             tools:text="Furkan Titiz" />
 
         <TextView
             android:id="@+id/detailPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:background="@drawable/custom_radius_background"
+            android:paddingVertical="16dp"
+            android:paddingHorizontal="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailArtistName"
             tools:text="8" />
-
-        <TextView
-            android:id="@+id/detailCollectionName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailPrice"
-            tools:text="Collection name" />
 
         <TextView
             android:id="@+id/detailKind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailCollectionName"
+            app:layout_constraintTop_toBottomOf="@+id/detailArtistName"
             tools:text="Kind" />
 
         <TextView
-            android:id="@+id/releaseDate"
+            android:id="@+id/releaseDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detailKind"
             tools:text="24.05.1997" />
-
-        <TextView
-            android:id="@+id/detailCurrency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/releaseDate"
-            tools:text="Currency" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

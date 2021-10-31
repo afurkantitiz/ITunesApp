@@ -1,6 +1,7 @@
 package com.example.casestudy.ui.detail
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,11 +11,11 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.casestudy.R
 import com.example.casestudy.base.BaseFragment
-import com.example.casestudy.data.entity.BaseResult
 import com.example.casestudy.databinding.FragmentDetailBinding
+import com.example.casestudy.utils.ImageResizer
 import com.example.casestudy.utils.gone
 import com.example.casestudy.utils.show
-import com.example.casestudy.utils.toast
+import com.example.casestudy.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,35 +32,31 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
 
     private fun onClickListener() {
         binding.likeButton.setOnClickListener {
-            args.currentItem.let {
-                if (!isInFavourite()) {
-                    viewModel.addFavorite(
-                        BaseResult(
-                            id = 0,
-                            collectionName = args.currentItem.collectionName,
-                            artworkUrl100 = args.currentItem.artworkUrl100,
-                            artistName = args.currentItem.artistName,
-                            currency = args.currentItem.currency,
-                            kind = args.currentItem.kind,
-                            releaseDate = args.currentItem.releaseDate,
-                            trackId = args.currentItem.trackId,
-                            trackName = args.currentItem.trackName,
-                            collectionPrice = args.currentItem.collectionPrice,
-                            price = args.currentItem.price
-                        )
-                    )
+            addFavorite()
+        }
 
-                    binding.lottieAnimation.show()
-                    binding.detailLayout.gone()
+        binding.backButton.setOnClickListener {
+            it.findNavController().popBackStack()
+        }
+    }
 
-                    binding.lottieAnimation.addAnimatorListener(object : Animator.AnimatorListener {
+    private fun addFavorite() {
+        args.currentItem.let {
+            if (!isInFavourite()) {
+                viewModel.addFavorite(args.currentItem)
+
+                binding.apply {
+                    lottieAnimation.show()
+                    detailLayout.gone()
+
+                    lottieAnimation.addAnimatorListener(object : Animator.AnimatorListener {
                         override fun onAnimationStart(animation: Animator?) {
                             Log.v("Animation", "Started")
                         }
 
                         override fun onAnimationEnd(animation: Animator?) {
-                            binding.lottieAnimation.gone()
-                            binding.detailLayout.show()
+                            lottieAnimation.gone()
+                            detailLayout.show()
                         }
 
                         override fun onAnimationCancel(animation: Animator?) {
@@ -70,41 +67,43 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                             Log.v("Animation", "Repeated")
                         }
                     })
-                    binding.likeButton.setImageResource(R.drawable.ic_like)
-                } else
-                    toast("This item is already in favourites")
-            }
-        }
-
-        binding.backButton.setOnClickListener {
-            it.findNavController().popBackStack()
+                    likeButton.setImageResource(R.drawable.ic_like)
+                }
+            } else
+                snackbar(binding.detailLayout, "This item is already in favourites")
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initViews() {
-        args.currentItem.let {
-            Glide
-                .with(requireContext())
-                .load(args.currentItem.artworkUrl100)
-                .into(binding.detailImageView)
+        binding.apply {
+            args.currentItem.apply {
+                Glide
+                    .with(requireContext())
+                    .load(artworkUrl100?.let { bigImage ->
+                        ImageResizer.getBigImage(
+                            bigImage
+                        )
+                    })
+                    .into(detailImageView)
 
-            binding.detailCurrency.text = args.currentItem.currency
-            binding.detailArtistName.text = args.currentItem.artistName
-            binding.detailKind.text = args.currentItem.kind
-            binding.releaseDate.text = args.currentItem.releaseDate?.substring(0, 10)
+                detailArtistName.text = "Artist Name: " + args.currentItem.artistName
+                detailKind.text = "Category: " + args.currentItem.kind
+                releaseDateTextView.text = releaseDate?.substring(0, 10)
 
-            binding.detailCollectionName.text =
-                if (args.currentItem.collectionName?.isNotEmpty() == true) args.currentItem.collectionName else args.currentItem.trackName
+                detailCollectionName.text =
+                    if (collectionName?.isNotEmpty() == true) collectionName else trackName
 
-            binding.detailPrice.text = when {
-                args.currentItem.collectionPrice?.isNotEmpty() == true -> args.currentItem.collectionPrice.toString() + " $"
-                args.currentItem.price?.isNotEmpty() == true -> args.currentItem.price.toString() + " $"
-                else -> "Price Not Found"
+                detailPrice.text = when {
+                    collectionPrice?.isNotEmpty() == true -> "$collectionPrice $currency"
+                    price?.isNotEmpty() == true -> "$price $currency"
+                    else -> "Price Not Found"
+                }
+
+                if (isInFavourite()) likeButton.setImageResource(R.drawable.ic_like)
+                else likeButton.setImageResource(R.drawable.ic_dislike)
             }
         }
-
-        if (isInFavourite()) binding.likeButton.setImageResource(R.drawable.ic_like)
-        else binding.likeButton.setImageResource(R.drawable.ic_dislike)
     }
 
     private fun isInFavourite(): Boolean {

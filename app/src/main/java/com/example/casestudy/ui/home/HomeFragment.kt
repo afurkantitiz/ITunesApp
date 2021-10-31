@@ -2,7 +2,6 @@ package com.example.casestudy.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
@@ -41,7 +40,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 if (!binding.searchRecyclerView.canScrollVertically(1) &&
                     newState == RecyclerView.SCROLL_STATE_IDLE
                 ) {
-                    if (viewModel.limit == viewModel.listSize){
+                    if (viewModel.limit == viewModel.listSize) {
                         viewModel.limit += 20
                         getDataFromApi(viewModel.currentSearchText)
                     }
@@ -81,8 +80,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun initViews() {
         homeAdapter.addListener(this)
 
-        binding.searchRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.searchRecyclerView.adapter = homeAdapter
+        binding.apply {
+            searchRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+            searchRecyclerView.adapter = homeAdapter
+        }
     }
 
     private fun searchViewListener() {
@@ -109,25 +110,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         if (term.length > 2) {
             viewModel.getNewsByQuery(term, viewModel.currentMedia, viewModel.limit)
                 .observe(viewLifecycleOwner, { response ->
-                    when (response.status) {
-                        Resource.Status.LOADING -> {
-                            binding.progressBar.show()
-                        }
-                        Resource.Status.SUCCESS -> {
-                            binding.progressBar.gone()
-
-                            if (response.data?.resultCount!! > viewModel.listSize) {
-                                homeList.clear()
-
-                                viewModel.listSize = response.data.resultCount
-                                homeList.addAll(response.data.results!!)
-
-                                homeAdapter.setData(homeList)
-                                binding.searchRecyclerView.adapter?.notifyItemInserted(homeList.size - 1)
+                    binding.apply {
+                        when (response.status) {
+                            Resource.Status.LOADING -> {
+                                progressBar.show()
                             }
-                        }
-                        Resource.Status.ERROR -> {
-                            binding.searchRecyclerView.gone()
+                            Resource.Status.SUCCESS -> {
+                                progressBar.gone()
+
+                                if (response.data?.resultCount!! > viewModel.listSize) {
+                                    homeList.clear()
+
+                                    viewModel.listSize = response.data.resultCount
+                                    homeList.addAll(response.data.results!!)
+
+                                    homeAdapter.setData(homeList)
+                                    searchRecyclerView.adapter?.notifyItemInserted(homeList.size - 1)
+                                }
+                            }
+                            Resource.Status.ERROR -> {
+                                searchRecyclerView.gone()
+                            }
                         }
                     }
                 })

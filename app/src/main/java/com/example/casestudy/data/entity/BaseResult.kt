@@ -10,9 +10,6 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "search")
 @Parcelize
 data class BaseResult(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") val id: Int = 0,
-
     @SerializedName("artistName")
     @ColumnInfo(name = "artistName") val artistName: String? = null,
 
@@ -40,6 +37,7 @@ data class BaseResult(
     @SerializedName("collectionName")
     @ColumnInfo(name = "collectionName") val collectionName: String? = null,
 
+    @PrimaryKey
     @SerializedName("trackId")
     @ColumnInfo(name = "trackId") val trackId: Int? = null
 ) : Parcelable

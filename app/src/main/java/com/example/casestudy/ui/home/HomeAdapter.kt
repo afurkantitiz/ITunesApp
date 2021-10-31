@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.casestudy.R
 import com.example.casestudy.data.entity.BaseResult
 import com.example.casestudy.databinding.ItemSearchCardBinding
+import com.example.casestudy.utils.ImageResizer
 
 class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
     private var searchList: List<BaseResult> = emptyList()
@@ -23,30 +24,32 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
     override fun onBindViewHolder(holder: HomeAdapter.HomeViewHolder, position: Int) {
         val search: BaseResult = searchList[position]
 
-        holder.binding.nameTextView.text =
-            if (search.collectionName?.isNotEmpty() == true) search.collectionName else search.trackName
+        holder.binding.apply {
+            nameTextView.text =
+                if (search.collectionName?.isNotEmpty() == true) search.collectionName else search.trackName
 
-        holder.binding.priceTextView.text = when {
-            search.collectionPrice?.isNotEmpty() == true -> search.collectionPrice.toString() + " $"
-            search.price?.isNotEmpty() == true -> search.price.toString() + " $"
-            else -> "Price Not Found"
-        }
+            priceTextView.text = when {
+                search.collectionPrice?.isNotEmpty() == true -> search.collectionPrice.toString() + " $"
+                search.price?.isNotEmpty() == true -> search.price.toString() + " $"
+                else -> "Price Not Found"
+            }
 
-        holder.binding.releaseDateTextView.text = search.releaseDate?.substring(0, 10)
+            releaseDateTextView.text = search.releaseDate?.substring(0, 10)
 
-        Glide
-            .with(holder.binding.imageView.context)
-            .load(search.artworkUrl100)
-            .into(holder.binding.imageView)
+            Glide
+                .with(imageView.context)
+                .load(search.artworkUrl100?.let { ImageResizer.getMediumImage(it) })
+                .into(imageView)
 
-        holder.binding.searchCardView.animation = AnimationUtils.loadAnimation(
-            holder.binding.searchCardView.context,
-            R.anim.fade_transition_animation
-        )
+            searchCardView.animation = AnimationUtils.loadAnimation(
+                searchCardView.context,
+                R.anim.fade_transition_animation
+            )
 
-        holder.binding.searchCardView.setOnClickListener {
-            listener?.let {
-                listener?.onClick(search)
+            searchCardView.setOnClickListener {
+                listener?.let {
+                    listener?.onClick(search)
+                }
             }
         }
     }
