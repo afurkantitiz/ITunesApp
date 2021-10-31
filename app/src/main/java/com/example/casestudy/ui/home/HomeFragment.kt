@@ -2,25 +2,30 @@ package com.example.casestudy.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.addisonelliott.segmentedbutton.SegmentedButtonGroup.OnPositionChangedListener
 import com.example.casestudy.base.BaseFragment
 import com.example.casestudy.data.entity.BaseResult
+import com.example.casestudy.data.entity.PopularSearch
 import com.example.casestudy.databinding.FragmentHomeBinding
 import com.example.casestudy.utils.Resource
 import com.example.casestudy.utils.gone
 import com.example.casestudy.utils.show
+import com.example.casestudy.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate),
-    IClickListener {
+    IClickListener, IPopularSearch {
     private val homeAdapter: HomeAdapter = HomeAdapter()
+    private val popularSearchAdapter: PopularSearchAdapter = PopularSearchAdapter()
     private val viewModel: HomeViewModel by viewModels()
     private var homeList: ArrayList<BaseResult> = arrayListOf()
 
@@ -31,6 +36,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         searchViewListener()
         categoryListeners()
         onScrollListener()
+
+        Log.v("popularList", viewModel.getPopularSearchs().size.toString())
     }
 
     private fun onScrollListener() {
@@ -79,10 +86,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private fun initViews() {
         homeAdapter.addListener(this)
+        popularSearchAdapter.addListener(this)
 
         binding.apply {
             searchRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
             searchRecyclerView.adapter = homeAdapter
+
+            popularRecyclerView.layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+            popularRecyclerView.adapter = popularSearchAdapter
+            popularSearchAdapter.setData(viewModel.getPopularSearchs() as List<PopularSearch>)
         }
     }
 
@@ -100,6 +114,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 if (viewModel.currentSearchText.length <= 2) {
                     resetSearch()
                     viewModel.currentSearchText = ""
+
+                    binding.searchRecyclerView.gone()
+                    binding.popularLayout.show()
                 }
                 return true
             }
@@ -117,6 +134,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                             }
                             Resource.Status.SUCCESS -> {
                                 progressBar.gone()
+                                binding.searchRecyclerView.show()
+                                binding.popularLayout.gone()
 
                                 if (response.data?.resultCount!! > viewModel.listSize) {
                                     homeList.clear()
@@ -129,7 +148,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                                 }
                             }
                             Resource.Status.ERROR -> {
-                                searchRecyclerView.gone()
+                                snackbar(constraintLayout, "ERROR")
                             }
                         }
                     }
@@ -149,5 +168,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         val action = data?.let { HomeFragmentDirections.actionHomeFragmentToDetailFragment(it) }
         if (action != null)
             findNavController().navigate(action)
+    }
+
+    override fun getPopularSearch(name: String?) {
+        binding.apply {
+            if (name != null) {
+                searchView.setQuery(name, false)
+                viewModel.currentSearchText = name
+            }
+            popularLayout.gone()
+        }
     }
 }

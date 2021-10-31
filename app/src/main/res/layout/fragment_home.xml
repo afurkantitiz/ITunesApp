@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginHorizontal="16dp"
+    android:id="@+id/constraintLayout"
     android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
 
@@ -47,8 +48,8 @@
             android:padding="10dp"
             app:selectedTextColor="@color/white"
             app:text="Movies"
-            app:textStyle="bold"
-            app:textColor="@color/black" />
+            app:textColor="@color/black"
+            app:textStyle="bold" />
 
         <com.addisonelliott.segmentedbutton.SegmentedButton
             android:id="@+id/musicButton"
@@ -58,8 +59,8 @@
             android:padding="10dp"
             app:selectedTextColor="@color/white"
             app:text="Music"
-            app:textStyle="bold"
-            app:textColor="@color/black" />
+            app:textColor="@color/black"
+            app:textStyle="bold" />
 
         <com.addisonelliott.segmentedbutton.SegmentedButton
             android:id="@+id/ebookButton"
@@ -69,8 +70,8 @@
             android:padding="10dp"
             app:selectedTextColor="@color/white"
             app:text="Ebook"
-            app:textStyle="bold"
-            app:textColor="@color/black" />
+            app:textColor="@color/black"
+            app:textStyle="bold" />
 
         <com.addisonelliott.segmentedbutton.SegmentedButton
             android:layout_width="0dp"
@@ -79,9 +80,41 @@
             android:padding="10dp"
             app:selectedTextColor="@color/white"
             app:text="Podcast"
-            app:textStyle="bold"
-            app:textColor="@color/black" />
+            app:textColor="@color/black"
+            app:textStyle="bold" />
     </com.addisonelliott.segmentedbutton.SegmentedButtonGroup>
+    
+    <LinearLayout
+        android:id="@+id/popularLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonGroup">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/primary"
+            android:text="@string/popular_searchs" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/popularRecyclerView"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -95,6 +128,7 @@
             android:id="@+id/searchRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:layout_marginTop="20dp"
             android:overScrollMode="never" />
 
